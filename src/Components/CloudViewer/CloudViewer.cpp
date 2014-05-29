@@ -17,9 +17,15 @@ namespace CloudViewer {
 
 CloudViewer::CloudViewer(const std::string & name) :
 		Base::Component(name),
-    prop_window_name("window_name", std::string("3D PC Viewer"))
+    prop_window_name("window_name", std::string("3D PC Viewer")),
+    prop_show_xyz("show_cordinate_system", true)
 {
-  registerProperty(prop_window_name);
+    registerProperty(prop_window_name);
+
+    prop_show_xyz.setCallback(boost::bind(&CloudViewer::xyz_callback, this, _1, _2));
+    registerProperty(prop_show_xyz);
+
+    viewer = NULL;
 }
 
 CloudViewer::~CloudViewer() {
@@ -52,7 +58,8 @@ bool CloudViewer::onInit() {
 	viewer->setBackgroundColor (0, 0, 0);
 	viewer->addPointCloud<pcl::PointXYZ> (pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>), "sample cloud");
 	viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 0.5, "sample cloud");
-	viewer->addCoordinateSystem (1.0);
+	if (prop_show_xyz)
+		viewer->addCoordinateSystem (1.0);
 	viewer->initCameraParameters ();
 
 	return true;
@@ -89,6 +96,14 @@ void CloudViewer::on_spin() {
 	viewer->spinOnce (100);
 }
 
+void CloudViewer::xyz_callback(bool old_value, bool new_value) {
+	if (!viewer) return;
+
+    if (new_value)
+    	viewer->addCoordinateSystem (1.0);
+    else
+    	viewer->removeCoordinateSystem();
+}
 
 
 } //: namespace CloudViewer

@@ -84,7 +84,9 @@ protected:
 	void on_cloud_normals();
 	void on_spin();
 
-  Base::Property<std::string> prop_window_name;
+	Base::Property<std::string> prop_window_name;
+	Base::Property<bool> prop_show_xyz;
+	void xyz_callback(bool old_value, bool new_value);
 
 	pcl::visualization::PCLVisualizer * viewer;
 };

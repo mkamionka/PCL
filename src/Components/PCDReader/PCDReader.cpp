@@ -31,6 +31,7 @@ PCDReader::~PCDReader() {
 }
 
 void PCDReader::prepareInterface() {
+
 	// Register data streams, events and event handlers HERE!
 	registerStream("out_cloud_xyz", &out_cloud_xyz);
 	registerStream("out_cloud_xyzrgb", &out_cloud_xyzrgb);

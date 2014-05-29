@@ -20,7 +20,7 @@ namespace StatisticalOutlierRemoval {
 StatisticalOutlierRemoval::StatisticalOutlierRemoval(const std::string & name) :
 		Base::Component(name) , 
 		negative("negative", false),
-		StddevMulThresh("StddevMulThresh", 1.0),
+		StddevMulThresh("StddevMulThresh", 0.10),
 		MeanK("MeanK", 50) {
 		registerProperty(negative);
 		registerProperty(StddevMulThresh);
