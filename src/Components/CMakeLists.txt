@@ -27,6 +27,8 @@ ADD_COMPONENT(PassThrough)
 
 ADD_COMPONENT(StatisticalOutlierRemoval)
 
+ADD_COMPONENT(StatisticalOutlierCounter)
+
 ADD_COMPONENT(ClustersViewer)
 
 ADD_COMPONENT(Clustering)
