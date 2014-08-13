@@ -21,11 +21,33 @@ CloudViewer::CloudViewer(const std::string & name) :
 		Base::Component(name),
     prop_window_name("window_name", std::string("3D PC Viewer")),
     prop_coordinate_system("coordinate_system", true),
-    prop_two_viewports("two_viewports", false)
+    prop_two_viewports("two_viewports", false),
+    prop_background_r("background_r", 0),
+    prop_background_g("background_g", 0),
+    prop_background_b("background_b", 0),
+    prop_bounding_box_r("bounding_box_r", 1.0),
+    prop_bounding_box_g("bounding_box_g", 1.0),
+    prop_bounding_box_b("bounding_box_b", 1.0),
+    prop_point_r("point_r", 0),
+    prop_point_g("point_g", 255),
+    prop_point_b("point_b", 0),
+    prop_point_size("point_size", 5)
+
 {
   registerProperty(prop_window_name);
   registerProperty(prop_coordinate_system);
   registerProperty(prop_two_viewports);
+  registerProperty(prop_background_r);
+  registerProperty(prop_background_g);
+  registerProperty(prop_background_b);
+  registerProperty(prop_bounding_box_r);
+  registerProperty(prop_bounding_box_g);
+  registerProperty(prop_bounding_box_b);
+  registerProperty(prop_point_r);
+  registerProperty(prop_point_g);
+  registerProperty(prop_point_b);
+  registerProperty(prop_point_size);
+  
 }
 
 CloudViewer::~CloudViewer() {
@@ -38,6 +60,10 @@ void CloudViewer::prepareInterface() {
 	registerStream("in_cloud_xyzrgb", &in_cloud_xyzrgb);
 	registerStream("in_cloud_xyzrgb2", &in_cloud_xyzrgb2);
 	registerStream("in_cloud_normals", &in_cloud_normals);
+
+    registerStream("in_min_pt", &in_min_pt);
+    registerStream("in_max_pt", &in_max_pt);
+    registerStream("in_point", &in_point);
 
 	// Register handlers
 	h_on_cloud_xyz.setup(boost::bind(&CloudViewer::on_cloud_xyz, this));
@@ -57,6 +83,13 @@ void CloudViewer::prepareInterface() {
 	h_on_cloud_normals.setup(boost::bind(&CloudViewer::on_cloud_normals, this));
 	registerHandler("on_cloud_normals", &h_on_cloud_normals);
 	addDependency("on_cloud_normals", &in_cloud_normals);
+    h_on_bounding_box.setup(boost::bind(&CloudViewer::on_bounding_box, this));
+    registerHandler("on_bounding_box", &h_on_bounding_box);
+    addDependency("on_bounding_box", &in_min_pt);
+    addDependency("on_bounding_box", &in_max_pt);
+    h_on_point.setup(boost::bind(&CloudViewer::on_point, this));
+    registerHandler("on_point", &h_on_point);
+    addDependency("on_point", &in_point);
 	h_on_spin.setup(boost::bind(&CloudViewer::on_spin, this));
 	registerHandler("on_spin", &h_on_spin);
 	addDependency("on_spin", NULL);
@@ -65,7 +98,7 @@ void CloudViewer::prepareInterface() {
 bool CloudViewer::onInit() {
 
 	if(prop_two_viewports){
-		cout<< LOG(LTRACE) << "CloudViewer::onInit, prop_two_viewports==true\n";
+        LOG(LTRACE) << "CloudViewer::onInit, prop_two_viewports==true\n";
 		viewer = new pcl::visualization::PCLVisualizer (prop_window_name);
 		v1 = 0;
 		v2 = 1;
@@ -76,14 +109,14 @@ bool CloudViewer::onInit() {
 		viewer->setBackgroundColor (0.3, 0.3, 0.3, v2);			
 	}
 	else{
-		cout<< LOG(LTRACE) << "CloudViewer::onInit, prop_two_viewports==false\n";
+        LOG(LTRACE) << "CloudViewer::onInit, prop_two_viewports==false\n";
 		viewer = new pcl::visualization::PCLVisualizer (prop_window_name);
-		viewer->setBackgroundColor (0, 0, 0);
-		if(prop_coordinate_system)
-		viewer->addCoordinateSystem (1.0, 0);
+		viewer->setBackgroundColor(prop_background_r,prop_background_g, prop_background_b);
+
 		viewer->addPointCloud<pcl::PointXYZ> (pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>), "sample cloud");
 		viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 0.5, "sample cloud");
 	}
+	// Add coordinate system -- different function call depending on the PCL version(!)
 	if(prop_coordinate_system) {
 #if PCL_VERSION_COMPARE(>=,1,7,1)
 		viewer->addCoordinateSystem (1.0, "ClustersViewer", 0);
@@ -168,6 +201,25 @@ void CloudViewer::on_clouds_xyzrgb() {
 }
 
 void CloudViewer::on_cloud_normals() {
+}
+
+void CloudViewer::on_bounding_box(){
+    pcl::PointXYZ minPt = in_min_pt.read();
+    pcl::PointXYZ maxPt = in_max_pt.read();
+
+    viewer->addCube (minPt.x, maxPt.x, minPt.y, maxPt.y, minPt.z, maxPt.z, prop_bounding_box_r, prop_bounding_box_g, prop_bounding_box_b);
+
+}
+
+void CloudViewer::on_point(){
+	pcl::PointXYZ point = in_point.read();
+	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+	cloud->push_back(point);
+	cout<<"point " <<point.x<< " " <<point.y << " " <<point.z<<endl;
+	cout<<"size: "<<cloud->size()<<endl;
+	pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> single_color (cloud, prop_point_r, prop_point_g, prop_point_b);
+	viewer->addPointCloud<pcl::PointXYZ> (cloud, single_color, "centroid");
+	viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, prop_point_size, "centroid");
 }
 
 void CloudViewer::on_spin() {
