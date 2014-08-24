@@ -20,16 +20,7 @@ namespace CloudViewer {
 CloudViewer::CloudViewer(const std::string & name) :
 		Base::Component(name),
     prop_window_name("window_name", std::string("3D PC Viewer")),
-<<<<<<< HEAD
-    prop_show_xyz("show_cordinate_system", true)
-{
-    registerProperty(prop_window_name);
 
-    prop_show_xyz.setCallback(boost::bind(&CloudViewer::xyz_callback, this, _1, _2));
-    registerProperty(prop_show_xyz);
-
-    viewer = NULL;
-=======
     prop_coordinate_system("coordinate_system", boost::bind(&CloudViewer::onCSShowClick, this, _2), true),
     prop_two_viewports("two_viewports", false),
     prop_background_color("background_color", boost::bind(&CloudViewer::onBackgroundColorChange, this, _2), std::string("0,0,0")),
@@ -54,7 +45,6 @@ CloudViewer::CloudViewer(const std::string & name) :
   registerProperty(prop_point_b);
   registerProperty(prop_point_size);
   
->>>>>>> d03a3cb0f6ceaabdb693773645bd7ad994c33f55
 }
 
 
@@ -62,14 +52,14 @@ void CloudViewer::onCSShowClick(const bool & new_show_cs_){
     CLOG(LDEBUG) << "CloudViewer::onCSShowClick show="<<new_show_cs_;
 	if(new_show_cs_) {
 #if PCL_VERSION_COMPARE(>=,1,7,1)
-		viewer->addCoordinateSystem (1.0, "ClustersViewer", 0);
+		//viewer->addCoordinateSystem (1.0, "ClustersViewer", 0);
 #else
 		viewer->addCoordinateSystem (1.0);
 #endif
 	}
 	else {
 #if PCL_VERSION_COMPARE(>=,1,7,1)
-		viewer->removeCoordinateSystem ("ClustersViewer");
+		//viewer->removeCoordinateSystem ("ClustersViewer");
 #else
 		viewer->removeCoordinateSystem (1.0);
 #endif
@@ -191,18 +181,14 @@ bool CloudViewer::onInit() {
 	// Add coordinate system -- different function call depending on the PCL version(!)
 	if(prop_coordinate_system) {
 #if PCL_VERSION_COMPARE(>=,1,7,1)
-		viewer->addCoordinateSystem (1.0, "ClustersViewer", 0);
+		//viewer->addCoordinateSystem (1.0, "ClustersViewer", 0);
 #else
 		viewer->addCoordinateSystem (1.0);
 #endif
 	}
 		
 	viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 0.5, "sample cloud");
-<<<<<<< HEAD
-	if (prop_show_xyz)
-		viewer->addCoordinateSystem (1.0);
-=======
->>>>>>> d03a3cb0f6ceaabdb693773645bd7ad994c33f55
+
 	viewer->initCameraParameters ();
 	return true;
 }
@@ -303,14 +289,7 @@ void CloudViewer::on_spin() {
 	viewer->spinOnce (100);
 }
 
-void CloudViewer::xyz_callback(bool old_value, bool new_value) {
-	if (!viewer) return;
 
-    if (new_value)
-    	viewer->addCoordinateSystem (1.0);
-    else
-    	viewer->removeCoordinateSystem();
-}
 
 
 } //: namespace CloudViewer

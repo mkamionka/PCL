@@ -102,11 +102,7 @@ protected:
     void on_point();
 	void on_spin();
 
-<<<<<<< HEAD
-	Base::Property<std::string> prop_window_name;
-	Base::Property<bool> prop_show_xyz;
-	void xyz_callback(bool old_value, bool new_value);
-=======
+
     Base::Property<std::string> prop_window_name;
     Base::Property<bool> prop_coordinate_system;
     Base::Property<bool> prop_two_viewports;
@@ -121,7 +117,6 @@ protected:
 	/// Property for setting of the background color. As default it is set to 1 row with 0, 0, 0(black).
 	Base::Property<std::string> prop_background_color;
 
->>>>>>> d03a3cb0f6ceaabdb693773645bd7ad994c33f55
 
 	pcl::visualization::PCLVisualizer * viewer;
 	pcl::visualization::PCLVisualizer * viewer2;

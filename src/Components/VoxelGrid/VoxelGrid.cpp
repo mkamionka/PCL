@@ -37,24 +37,15 @@ void VoxelGrid::prepareInterface() {
 	registerStream("in_cloud_xyzrgb_normal", &in_cloud_xyzrgb_normal);
 	registerStream("out_cloud_xyzrgb", &out_cloud_xyzrgb);
 	registerStream("out_cloud_xyzrgb_normal", &out_cloud_xyzrgb_normal);
-<<<<<<< HEAD
-=======
 
->>>>>>> d03a3cb0f6ceaabdb693773645bd7ad994c33f55
 	// Register handlers
 	h_filter.setup(boost::bind(&VoxelGrid::filter, this));
 	registerHandler("filter", &h_filter);
 	addDependency("filter", &in_cloud_xyzrgb);
-<<<<<<< HEAD
 
-	h_filter_normal.setup(boost::bind(&VoxelGrid::filter_normal, this));
-	registerHandler("filter_normal", &h_filter_normal);
-	addDependency("filter_normal", &in_cloud_xyzrgb_normal);
-=======
 	h_filter_normal.setup(boost::bind(&VoxelGrid::filter_normal, this));
  	registerHandler("filter_normal", &h_filter_normal);
  	addDependency("filter_normal", &in_cloud_xyzrgb_normal);
->>>>>>> d03a3cb0f6ceaabdb693773645bd7ad994c33f55
 }
 
 bool VoxelGrid::onInit() {
@@ -99,18 +90,6 @@ void VoxelGrid::filter_normal () {
 
 }
 
-void VoxelGrid::filter_normal () {
- 	pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr cloud = in_cloud_xyzrgb_normal.read();
- 
- 	pcl::VoxelGrid<pcl::PointXYZRGBNormal> vg;
- 	pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr cloud_filtered (new pcl::PointCloud<pcl::PointXYZRGBNormal>);
- 	vg.setInputCloud (cloud);
- 	vg.setLeafSize (x, y, z);
- 	vg.filter (*cloud_filtered);
- 	std::cout << "PointCloud after filtering has: " << cloud_filtered->points.size ()  << " data points." << std::endl;
- 	out_cloud_xyzrgb_normal.write(cloud_filtered);
- 
- }
 
 } //: namespace VoxelGrid
 } //: namespace Processors
