@@ -7,6 +7,8 @@ ADD_COMPONENT(PCDReader)
 
 ADD_COMPONENT(PCDWriter)
 
+ADD_COMPONENT(TransformCloud)
+
 ADD_COMPONENT(PlaneGenerator)
 
 ADD_COMPONENT(RANSACPlane)
@@ -36,3 +38,11 @@ ADD_COMPONENT(FindBoundingBox)
 ADD_COMPONENT(CenterOfMass)
 
 ADD_COMPONENT(ClustersViewer)
+
+
+
+
+
+ADD_COMPONENT(GaussCloud)
+
+ADD_COMPONENT(TransCloud)
