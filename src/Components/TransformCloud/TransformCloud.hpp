@@ -16,7 +16,21 @@
 #include "Property.hpp"
 #include "Types/HomogMatrix.hpp"
 #include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/filters/filter.h>
+#include <pcl/point_types.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_representation.h>
+//
+#include "pcl/impl/instantiate.hpp"
+#include "pcl/search/kdtree.h"
+#include "pcl/search/impl/kdtree.hpp"
+#include <pcl/registration/correspondence_estimation.h>
+#include "pcl/registration/correspondence_rejection_sample_consensus.h"
 
+
+#include <pcl/io/pcd_io.h>
+#include <pcl/visualization/cloud_viewer.h>
+#include <pcl/visualization/point_cloud_color_handlers.h>
 
 namespace Processors {
 namespace TransformCloud {
@@ -72,10 +86,9 @@ protected:
 	// Input data streams
 
 	Base::DataStreamIn< pcl::PointCloud<pcl::PointXYZRGB>::Ptr > in_cloud_xyzrgb;
-	Base::DataStreamIn< pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr > in_cloud_xyzrgb_normals;
 
 	Base::DataStreamOut< pcl::PointCloud<pcl::PointXYZRGB>::Ptr > out_cloud_xyzrgb;
-	Base::DataStreamOut< pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr > out_cloud_xyzrgb_normals;
+
 	// Output data streams
 
 	// Handlers

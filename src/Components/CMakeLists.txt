@@ -39,10 +39,5 @@ ADD_COMPONENT(CenterOfMass)
 
 ADD_COMPONENT(ClustersViewer)
 
-
-
-
-
 ADD_COMPONENT(GaussCloud)
 
-ADD_COMPONENT(TransCloud)

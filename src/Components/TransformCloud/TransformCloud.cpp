@@ -50,7 +50,7 @@ TransformCloud::~TransformCloud() {
 void TransformCloud::prepareInterface() {
 	// Register data streams, events and event handlers HERE!
 	registerStream("in_cloud_xyzrgb", &in_cloud_xyzrgb);
-	registerStream("in_cloud_xyzrgb_normals", &in_cloud_xyzrgb_normals);
+
 
 	// Register handlers
 	h_transformCloud.setup(boost::bind(&TransformCloud::transformCloud, this));
@@ -81,7 +81,7 @@ void TransformCloud::transformCloud(){
 	if(!in_cloud_xyzrgb.empty()){
 
 		Types::HomogMatrix homogMatrix;
-		cv::Mat_<double> wsp(1,4);
+		cv::Mat_<double> wsp(4,1);
 
 		CLOG(LDEBUG) << "in transformCloud() \n";
 		cv::Mat_<double> rvec;
@@ -140,11 +140,11 @@ void TransformCloud::transformCloud(){
 			wsp(0,0)=cloud_xyzrgb->at(index).x;
 			wsp(0,1)=cloud_xyzrgb->at(index).y;
 			wsp(0,2)=cloud_xyzrgb->at(index).z;
-			wsp(0,3)=0;
+			wsp(0,3)=1;
 
-			int m=1;
+			int m=4;
 			int n=4;
-			int p=4;
+			int p=1;
 			cv::Mat_<double> C= cv::Mat::eye(1,4,1);
 
 			  for(int i = 0; i < m; i++)
@@ -152,7 +152,7 @@ void TransformCloud::transformCloud(){
 			    {
 			      double s = 0;
 			      for(int k = 0; k < n; k++)
-			    	  s += wsp(i,k) * hm.elements[k][j];
+			    	  s += hm.elements[i][k]* wsp(k,j);
 			      C[i][j] = s;
 			    }
 

@@ -14,6 +14,9 @@
 #include "EventHandler2.hpp"
 
 #include <opencv2/opencv.hpp>
+#include "Types/HomogMatrix.hpp"
+#include <pcl/visualization/pcl_visualizer.h>
+
 
 
 
@@ -66,6 +69,9 @@ protected:
 	 * Stop component
 	 */
 	bool onStop();
+	Base::DataStreamIn< pcl::PointCloud<pcl::PointXYZRGB>::Ptr > in_cloud_xyzrgb;
+
+	Base::DataStreamOut< pcl::PointCloud<pcl::PointXYZRGB>::Ptr > out_cloud_xyzrgb;
 
 
 	// Input data streams
@@ -73,12 +79,17 @@ protected:
 	// Output data streams
 
 	// Handlers
-
+	const static int q;
+	const static float c1;
+	const static float c2;
+	const static float c3;
 	// Properties
 
-	
+	//http://teleinfo.pb.edu.pl/krashan/articles/gauss/
 	// Handlers
-
+	Base::EventHandler2 h_makeNoisyCloud;
+	void makeNoisyCloud();
+	float generateNumber(float, float);
 };
 
 } //: namespace GaussCloud
