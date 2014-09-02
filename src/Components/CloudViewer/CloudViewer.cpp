@@ -119,7 +119,7 @@ bool CloudViewer::onInit() {
 	// Add coordinate system -- different function call depending on the PCL version(!)
 	if(prop_coordinate_system) {
 #if PCL_VERSION_COMPARE(>=,1,7,1)
-		viewer->addCoordinateSystem (1.0, "ClustersViewer", 0);
+		viewer->addCoordinateSystem (1.0, 0);
 #else
 		viewer->addCoordinateSystem (1.0);
 #endif
