@@ -34,14 +34,16 @@ PCDReader::~PCDReader() {
 
 void PCDReader::prepareInterface() {
 	// Register data streams.
+    registerStream("in_trigger", &in_trigger);
 	registerStream("out_cloud_xyz", &out_cloud_xyz);
 	registerStream("out_cloud_xyzrgb", &out_cloud_xyzrgb);
     registerStream("out_cloud_xyzsift", &out_cloud_xyzsift);
 
     // Register handlers
-	h_Read.setup(boost::bind(&PCDReader::Read, this));
-	registerHandler("Read", &h_Read);
+    registerHandler("Read", boost::bind(&PCDReader::Read, this));
 
+    registerHandler("onTriggeredLoadNextCloud", boost::bind(&PCDReader::onTriggeredLoadNextCloud, this));
+    addDependency("onTriggeredLoadNextCloud", &in_trigger);
 }
 
 bool PCDReader::onInit() {
@@ -63,17 +65,26 @@ bool PCDReader::onStart() {
 	return true;
 }
 
+void PCDReader::onTriggeredLoadNextCloud(){
+    CLOG(LDEBUG) << "PCDReader::onTriggeredLoadNextCloud";
+    in_trigger.read();
+    Read();
+}
+
 void PCDReader::Read() {
 	CLOG(LTRACE) << "PCDReader::Read\n";
 	// Try to read the cloud of XYZ points.
 	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_xyz (new pcl::PointCloud<pcl::PointXYZ>);
+/*
 	if (pcl::io::loadPCDFile<pcl::PointXYZ> (filename, *cloud_xyz) == -1){
 		CLOG(LWARNING) <<"Cannot read PointXYZ cloud from "<<filename;
 	}else{
 		out_cloud_xyz.write(cloud_xyz);
+		CLOG(LINFO) <<"PointXYZ size: "<<cloud_xyz->size();
 		CLOG(LINFO) <<"PointXYZ cloud loaded properly from "<<filename;
-		return;
+        //return;
 	}// else
+*/
 	  
 	// Try to read the cloud of XYZRGB points.
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_xyzrgb (new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -82,7 +93,7 @@ void PCDReader::Read() {
 	}else{
 		out_cloud_xyzrgb.write(cloud_xyzrgb);
 		CLOG(LINFO) <<"PointXYZRGB cloud loaded properly from "<<filename;
-		return;
+        //return;
 	}// else
 
 	// Try to read the cloud of XYZSIFT points.
@@ -92,7 +103,7 @@ void PCDReader::Read() {
 	}else{
     	out_cloud_xyzsift.write(cloud_xyzsift);
 		CLOG(LINFO) <<"PointXYZSIFT cloud loaded properly from "<<filename;
-		return;
+        //return;
 	}// else
 
 }
