@@ -69,8 +69,8 @@ protected:
 	bool onStop();
 
 
-    /// Trigger - used for loading next cloud in case of several readers.
-    Base::DataStreamIn<Base::UnitType> in_trigger;
+    	/// Trigger - used for loading next cloud in case of several readers.
+    	Base::DataStreamIn<Base::UnitType> in_trigger;
 
 	/// Cloud containing points with Cartesian coordinates (XYZ).
 	Base::DataStreamOut<pcl::PointCloud<pcl::PointXYZ>::Ptr > out_cloud_xyz;
@@ -84,11 +84,11 @@ protected:
 	/// Cloud containing points with Cartesian coordinates with associated normals (XYZ + normal).
 	//Base::DataStreamIn< pcl::PointCloud<pcl::Normal>::Ptr > in_cloud_normals;
 
-    // Handlers
-    void onTriggeredLoadNextCloud();
-    void Read();
+    	// Handlers
+    	void onTriggeredLoadNextCloud();
+    	void Read();
 
-    //Properties
+	//Properties
 	Base::Property<std::string> filename;
 	Base::Property<bool> read_on_init;
 };

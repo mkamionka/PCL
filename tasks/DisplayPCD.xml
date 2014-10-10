@@ -18,7 +18,7 @@
 		<Subtask name="Processing">
 			<Executor name="Exec1"  period="0.1">
 				<Component name="Source" type="PCL:PCDReader" priority="1" bump="2">
-					<param name="filename">/home/tkornuta/Objects/cereal_box_1_co5_xyzrgb.pcd</param>					
+					<param name="filename">/home/mkamionk/RGB-D/cuboids_xyzrgb.pcd</param>					
 				</Component>
 			</Executor>
 		</Subtask>
