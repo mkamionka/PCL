@@ -20,6 +20,7 @@ namespace CloudViewer {
 CloudViewer::CloudViewer(const std::string & name) :
 		Base::Component(name),
     prop_window_name("window_name", std::string("3D PC Viewer")),
+
     prop_coordinate_system("coordinate_system", boost::bind(&CloudViewer::onCSShowClick, this, _2), true),
     prop_two_viewports("two_viewports", false),
     prop_background_color("background_color", boost::bind(&CloudViewer::onBackgroundColorChange, this, _2), std::string("0,0,0")),
@@ -57,12 +58,17 @@ void CloudViewer::onCSShowClick(const bool & new_show_cs_){
     CLOG(LDEBUG) << "CloudViewer::onCSShowClick show="<<new_show_cs_;
 /*    if(new_show_cs_) {
 #if PCL_VERSION_COMPARE(>=,1,7,1)
+<<<<<<< HEAD
         viewer->addCoordinateSystem (1.0, "CloudViewer", 0);
+=======
+		//viewer->addCoordinateSystem (1.0, "ClustersViewer", 0);
+>>>>>>> marta/master
 #else
 		viewer->addCoordinateSystem (1.0);
 #endif
 	}
 	else {
+<<<<<<< HEAD
 #if PCL_VERSION_COMPARE(>=,1,7,2)
         viewer->removeCoordinateSystem ("CloudViewer", 0);
 #elif PCL_VERSION_COMPARE(>=,1,7,1)
@@ -189,13 +195,18 @@ bool CloudViewer::onInit() {
 	// Add coordinate system -- different function call depending on the PCL version(!)
 	if(prop_coordinate_system) {
 #if PCL_VERSION_COMPARE(>=,1,7,1)
+<<<<<<< HEAD
         viewer->addCoordinateSystem (1.0, "CloudViewer", 0);
+=======
+		//viewer->addCoordinateSystem (1.0, "ClustersViewer", 0);
+>>>>>>> marta/master
 #else
 		viewer->addCoordinateSystem (1.0);
 #endif
 	}
 		
 	viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 0.5, "sample cloud");
+
 	viewer->initCameraParameters ();
 	return true;
 }
@@ -334,6 +345,7 @@ void CloudViewer::on_point(){
 void CloudViewer::on_spin() {
 	viewer->spinOnce (100);
 }
+
 
 
 
