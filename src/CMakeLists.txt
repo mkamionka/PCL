@@ -25,6 +25,7 @@ add_definitions(${PCL_DEFINITIONS})
 
 DISCODE_FIND_DCL(PCLCoreTypes)
 DISCODE_FIND_DCL(CvCoreTypes)
+DISCODE_FIND_DCL(CvBasic)
 
 # ##############################################################################
 # Add source directories
