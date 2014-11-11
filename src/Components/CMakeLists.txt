@@ -7,7 +7,7 @@ ADD_COMPONENT(PCDReader)
 
 ADD_COMPONENT(PCDWriter)
 
-ADD_COMPONENT(TransformCloud)
+#ADD_COMPONENT(TransformCloud)
 
 ADD_COMPONENT(PlaneGenerator)
 
@@ -41,4 +41,5 @@ ADD_COMPONENT(ClustersViewer)
 
 ADD_COMPONENT(GaussCloud)
 
+ADD_COMPONENT(CloudTransformer)
 

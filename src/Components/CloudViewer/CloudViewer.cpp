@@ -44,12 +44,6 @@ void CloudViewer::onCSShowClick(const bool & new_show_cs_) {
 	CLOG(LDEBUG) << "CloudViewer::onCSShowClick show=" << new_show_cs_;
 	if (new_show_cs_) {
 #if PCL_VERSION_COMPARE(>=,1,7,1)
-        viewer->addCoordinateSystem (1.0, "CloudViewer", 0);
-#else
-		viewer->addCoordinateSystem (1.0);
-#endif
-	}
-	else {
 		viewer->addCoordinateSystem(1.0, "CloudViewer", 0);
 #else
 		viewer->addCoordinateSystem (1.0);

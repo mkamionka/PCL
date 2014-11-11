@@ -103,8 +103,8 @@ void GaussCloud::makeNoisyCloud(){
 
 			for (int i = 0; i < 4; ++i) {
 				for (int j = 0; j < 4; ++j) {
-					hm.elements[i][j] = t.at<double>(i,j);
-					CLOG(LINFO) << "hm element: " << hm.elements[i][j];
+					hm.setElement(i, j, t.at<double>(i,j));
+					CLOG(LINFO) << "hm element: " << hm.getElement(i, j);
 				}
 			}
 					wsp(0,0)=cloud_xyzrgb->at(index).x;
@@ -124,8 +124,8 @@ void GaussCloud::makeNoisyCloud(){
 					      double s = 0;
 					      for(int k = 0; k < n; k++){
 					    	  CLOG(LINFO) <<"wsp: "<<k<<j<<" " << wsp(k,j);
-					    	  CLOG(LINFO) <<"hm.elements: " <<  hm.elements[i][k];
-					    	  s += hm.elements[i][k]* wsp(k,j);
+					    	  CLOG(LINFO) <<"hm.elements: " <<  hm.getElement(i, j);
+					    	  s += hm.getElement(i, j) * wsp(k,j);
 					    	  CLOG(LINFO) <<"result: " <<s;
 					      }
 					      C[i][j] = s;
