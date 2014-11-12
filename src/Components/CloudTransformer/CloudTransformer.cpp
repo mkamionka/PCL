@@ -16,8 +16,14 @@ namespace Processors {
 namespace CloudTransformer {
 
 CloudTransformer::CloudTransformer(const std::string & name) :
-		Base::Component(name)  {
+		Base::Component(name), 
+		filter("filter", 0),
+	    	count_xyz(0), 
+		count_xyzrgb(0),
+		count_xyzsift(0),
+		count_xyzshot(0) {
 
+	registerProperty(filter);
 }
 
 CloudTransformer::~CloudTransformer() {
@@ -111,8 +117,13 @@ void CloudTransformer::transform_clouds_eigen() {
 
 void CloudTransformer::transform_xyz(Types::HomogMatrix hm_) {
     CLOG(LTRACE) << "CloudTransformer::transform_xyz()";
+
+    count_xyz++;
+
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = in_cloud_xyz.read();
-    Eigen::Matrix4f trans = hm_.getElements();
+    Eigen::Matrix4f trans = Eigen::Matrix4f::Identity();
+    if(!filter || filter == count_xyz)
+	trans = hm_.getElements();
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2(new pcl::PointCloud<pcl::PointXYZ>());
     pcl::transformPointCloud(*cloud, *cloud2, trans) ;
     out_cloud_xyz.write(cloud2);
@@ -120,8 +131,13 @@ void CloudTransformer::transform_xyz(Types::HomogMatrix hm_) {
 
 void CloudTransformer::transform_xyzrgb(Types::HomogMatrix hm_) {
     CLOG(LTRACE) << "CloudTransformer::transform_xyzrgb()";
+
+    count_xyzrgb++;
+
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud = in_cloud_xyzrgb.read();
-    Eigen::Matrix4f trans = hm_.getElements();
+    Eigen::Matrix4f trans = Eigen::Matrix4f::Identity();
+    if(!filter || filter == count_xyzrgb)
+	trans = hm_.getElements();
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud2(new pcl::PointCloud<pcl::PointXYZRGB>());
     pcl::transformPointCloud(*cloud, *cloud2, trans) ;
     out_cloud_xyzrgb.write(cloud2);
@@ -129,8 +145,13 @@ void CloudTransformer::transform_xyzrgb(Types::HomogMatrix hm_) {
 
 void CloudTransformer::transform_xyzsift(Types::HomogMatrix hm_) {
     CLOG(LTRACE) << "CloudTransformer::transform_xyzsift()";
+
+    count_xyzsift++;
+
     pcl::PointCloud<PointXYZSIFT>::Ptr cloud = in_cloud_xyzsift.read();
-    Eigen::Matrix4f trans = hm_.getElements();
+    Eigen::Matrix4f trans = Eigen::Matrix4f::Identity();
+    if(!filter || filter == count_xyzsift)
+	trans = hm_.getElements();
     pcl::PointCloud<PointXYZSIFT>::Ptr cloud2(new pcl::PointCloud<PointXYZSIFT>());
     pcl::transformPointCloud(*cloud, *cloud2, trans) ;
     out_cloud_xyzsift.write(cloud2);
@@ -138,8 +159,13 @@ void CloudTransformer::transform_xyzsift(Types::HomogMatrix hm_) {
 
 void CloudTransformer::transform_xyzshot(Types::HomogMatrix hm_) {
     CLOG(LTRACE) << "CloudTransformer::transform_xyzshot()";
+
+    count_xyzshot++;
+
     pcl::PointCloud<PointXYZSHOT>::Ptr cloud = in_cloud_xyzshot.read();
-    Eigen::Matrix4f trans = hm_.getElements();
+    Eigen::Matrix4f trans = Eigen::Matrix4f::Identity();
+    if(!filter || filter == count_xyzshot)
+	trans = hm_.getElements();
     pcl::PointCloud<PointXYZSHOT>::Ptr cloud2(new pcl::PointCloud<PointXYZSHOT>());
     pcl::transformPointCloud(*cloud, *cloud2, trans) ;
     out_cloud_xyzshot.write(cloud2);

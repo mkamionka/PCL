@@ -47,10 +47,12 @@ void GaussCloud::prepareInterface() {
 	// Register data streams, events and event handlers HERE!
 	// Register handlers
 	registerStream("in_cloud_xyzrgb", &in_cloud_xyzrgb);
+	registerStream("out_cloud_xyzrgb", &out_cloud_xyzrgb);
 
 	// Register handlers
 	h_makeNoisyCloud.setup(boost::bind(&GaussCloud::makeNoisyCloud, this));
 	registerHandler("makeNoisyCloud", &h_makeNoisyCloud);
+	addDependency("makeNoisyCloud", &in_cloud_xyzrgb);
 
 }
 
@@ -72,6 +74,7 @@ bool GaussCloud::onStart() {
 }
 
 void GaussCloud::makeNoisyCloud(){
+    	CLOG(LINFO) << "GaussCloud::makeNoisyCloud";
 	if(!in_cloud_xyzrgb.empty()){
 		pcl::PointCloud <pcl::PointXYZRGB>::Ptr cloud_xyzrgb = in_cloud_xyzrgb.read();
 		std::vector<int> indices;

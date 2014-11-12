@@ -90,6 +90,11 @@ protected:
     void transform_clouds_eigen();
 
 	// Properties
+	Base::Property<int> filter;
+	int count_xyz;
+	int count_xyzrgb;
+	int count_xyzsift;
+	int count_xyzshot;
 
     //   Helper functions, specialized for every cloud type.
     void transform_xyz(Types::HomogMatrix hm_);
