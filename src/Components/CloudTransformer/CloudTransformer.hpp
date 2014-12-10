@@ -83,6 +83,7 @@ protected:
 	Base::DataStreamOut<pcl::PointCloud<pcl::PointXYZ>::Ptr> out_cloud_xyz;
 	Base::DataStreamOut<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> out_cloud_xyzrgb;
     Base::DataStreamOut<pcl::PointCloud<PointXYZSIFT>::Ptr> out_cloud_xyzsift;
+    Base::DataStreamOut<pcl::PointCloud<PointXYZSIFT>::Ptr> out_cloud_transformedsift;
     Base::DataStreamOut<pcl::PointCloud<PointXYZSHOT>::Ptr> out_cloud_xyzshot;
 
     // Handlers
@@ -95,6 +96,7 @@ protected:
 	int count_xyzrgb;
 	int count_xyzsift;
 	int count_xyzshot;
+    pcl::PointCloud<PointXYZSIFT>::Ptr saved_cloud;
 
     //   Helper functions, specialized for every cloud type.
     void transform_xyz(Types::HomogMatrix hm_);
